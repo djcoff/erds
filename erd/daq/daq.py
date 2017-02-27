@@ -1,17 +1,18 @@
 '''
-instrument.py: 
-    define the abstract instrument class that will be inherited by all
-    instruments in the erd suite. 
+daq.py: 
+    define the abstract DAQ class that will be inherited by all
+    members of the DAQ class in the erd suite. 
 '''
-from erd.daq.daq import DAQ
-import abc
 
-class Instrument(DAQ):
+import abc
+import asyncio
+
+class DAQ(metaclass=abc.ABCMeta):
 #class Instrument(abc.ABCMeta):
     #Eventually this will be a metadata class
     
     def __init__(self):
-        self.name = 'Instrument'
+        self.name = 'DAQ'
         self.type = 'Generic'
         self.mfg = None
         self.model = None
@@ -19,15 +20,11 @@ class Instrument(DAQ):
         
         #info = InstrumentInfo()
         #interface = Interface()
-    
+        self.loop = asyncio.get_event_loop()
+        
     @abc.abstractmethod
-    def start(self):
-        pass
-    
-    def stop(self):
-        pass
-
     def configure(self):
         pass
     
+
 # Need to include event loop at this level

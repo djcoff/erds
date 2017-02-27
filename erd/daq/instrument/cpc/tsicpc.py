@@ -2,7 +2,7 @@
    Concrete instrument class for TSI 3010 CPC
 '''
 
-from .cpc import CPC
+from erd.daq.instrument.cpc.cpc import CPC
 
 #@Instrument.register
 class TSI3010(CPC):

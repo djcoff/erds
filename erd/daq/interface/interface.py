@@ -1,5 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import asyncio
+from erd.daq.daq import DAQ
+
 """
 Interface
 Abstract base class for HW Interface between Instrument class and "hardware". 
@@ -8,9 +10,10 @@ Interface requires:
    - configuration (dictionary with hw specific values)
 """
 
-class Interface(metaclass=ABCMeta):
+class Interface(DAQ):
     
     def __init__(self):
+        super().__init__()
         self.name = None
         self.type = None
         self.loop = None
@@ -49,7 +52,7 @@ class SerialPort(Interface):
 class TCPPort(Interface):
     
     def __init__(self):
-        super().__init__(self)
+        super().__init__()
         
     def open(self):
         pass

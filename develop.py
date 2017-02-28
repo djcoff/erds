@@ -2,10 +2,15 @@ import sys
 #import erd
 #from erd.daq import *
 #from erd.daq.instrument.cpc.tsicpc import TSI3010
-from erd.daq.interface.interface import TCPPort
-from erd.daq.instrument.cpc.tsicpc import TSI3010
+#from erd.daq.interface.interface import TCPPort
+#from erd.daq.instrument.cpc.tsicpc import TSI3010
+
+from erd.daq.instrument.instfactory import InstrumentFactory
+from erd.daq.instrument.instrument import Instrument
 
 import asyncio
+import inspect
+
 
 #for line in sys.path: print(line)
 
@@ -21,24 +26,101 @@ import asyncio
 
 #     import instrument
 #     #from daq.instrument.cpc.tsicpc import TSI3010
-    
- if __name__ == "__main__":
 
-    async def run_client(message, loop):
-        await tcp_echo_client(message, loop) 
+
+# def get_subclasses(class):
+    
+#     return class.__subclasses__()
+
+# def get_instrument_list():
+#     instruments = ()
+    
+#     cls = Instrument()
+    
+#     cls_list = get_subclasses(cls)
+    
+    
+
+# def build_class_config():
+
+def dummy_build_inst_config():
+    dummy = {"name":"dummy","class":"DummyInstrument"}
+    return dummy
+
+task_list = []
+names = ['one','two','three']
+
+class TestTask:
+    index = 0
+
+    def __init__(self):
+        self.name = names[TestTask.index]   
+        self.counter = 0
+        TestTask.index += 1
+        
+    def run(self):
+        print('Running:' + self.name)
+        if (self.counter > 10):
+            self.counter = 0
+        else:
+            self.counter += 1
+        
+        
+async def run_task(cls):
+
+    #await tcp_echo_client(message, loop) 
+    while True:
+        cls.run()
+        if (cls.counter > 10):
+            new_task()
+        await asyncio.sleep(.25)
+
+def new_task():
+    
+    if TestTask.index < 3:
+        task_cls = TestTask()
+        task = asyncio.ensure_future(run_task(task_cls))
+        task_list.append(task)
+    
+if __name__ == "__main__":
+
+
+    #InstrumentFactory.build_factories()
+    
+    # config = dummy_build_inst_config()
+    # dummy = InstrumentFactory.create(config)
+    
+    # print(dummy)
+    
+    # classNameGen()
+    
+    #print(InstrumentFactory.__name__)
+    
+    #print(dummy.__class__.__name__)
+    #print(dummy.__doc__)
+    #print(dummy.__file__)
+    #print(dummy.__name__)
+    #print(dummy.__qualname__)
+    #print(dummy.__module__)
 
     loop = asyncio.get_event_loop()
-    task = asyncio.ensure_future(run_client(message,loop))
+    # async def run_client(message, loop):
+    #     await tcp_echo_client(message, loop) 
+    new_task()
+    print(task_list)
+    # task = asyncio.ensure_future(run_client(message,loop))
 
-    iface_config = {
+    # iface_config = {
 
     try:
         #loop.run_forever()
         #loop.run_until_complete(tcp_echo_client(message, loop))
-        loop.run_until_complete(asyncio.wait([task,]))
+        #loop.run_until_complete(asyncio.wait([task,]))
+        loop.run_until_complete(asyncio.wait(task_list))
     except KeyboardInterrupt:
          #pass
-         task.cancel()
+         for task in task_list:
+             task.cancel()
          loop.run_forever()
     #     task.exception()
     #    loop.stop()

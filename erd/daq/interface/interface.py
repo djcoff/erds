@@ -20,8 +20,8 @@ class Interface(DAQ):
         
         #self.info = InterfaceInfo
         #self.config = InterfaceConfig
-        self.__inputs = []
-        self.__outputs = []
+        self.inputs = []
+        self.outputs = []
         
     
     @abstractmethod    
@@ -36,26 +36,26 @@ class Interface(DAQ):
     def configure(self): #second arg will be config info
         pass
     
-    @property
-    def inputs(self):
-        return self.input_list
+    # @property
+    # def inputs(self):
+    #     return self.input_list
         
-    @inputs.setter    
-    def inputs(self,input_list):
-        self.input_list = input_list
+    # @inputs.setter    
+    # def inputs(self,input_list):
+    #     self.input_list = input_list
 
         
-    def add_input(iface_input):
-        self.input_list.append(iface_input)
+    # def add_input(iface_input):
+    #     self.input_list.append(iface_input)
     
-    def output_list():
-        return self.output_list
+    # def output_list():
+    #     return self.output_list
         
-    def output_list(output_list):
-        self.output_list = output_list
+    # def output_list(output_list):
+    #     self.output_list = output_list
 
-    def add_output(iface_output):
-        self.output_list.append(iface_output)
+    # def add_output(iface_output):
+    #     self.output_list.append(iface_output)
     
     
     
@@ -78,6 +78,20 @@ class TCPPort(Interface):
     
     def __init__(self):
         super().__init__()
+        
+    def open(self):
+        pass
+    
+    def close(self):
+        pass
+    
+    def configure(self):
+        pass
+    
+class DummyPort(Interface):
+    
+    def __init__(self):
+        super().__init__(self)
         
     def open(self):
         pass

@@ -26,5 +26,11 @@ class DAQ(metaclass=abc.ABCMeta):
     def configure(self):
         pass
     
+    @staticmethod
+    @abc.abstractmethod
+    def factory_create():
+        pass
 
+       
+    
 # Need to include event loop at this level

@@ -1,1 +1,1 @@
-__all__ = ['instrument']
+__all__ = ['instrument','instfactory']

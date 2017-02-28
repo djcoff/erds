@@ -30,6 +30,8 @@ import asyncio
     loop = asyncio.get_event_loop()
     task = asyncio.ensure_future(run_client(message,loop))
 
+    iface_config = {
+
     try:
         #loop.run_forever()
         #loop.run_until_complete(tcp_echo_client(message, loop))

@@ -20,6 +20,9 @@ class Interface(DAQ):
         
         #self.info = InterfaceInfo
         #self.config = InterfaceConfig
+        self.__inputs = []
+        self.__outputs = []
+        
     
     @abstractmethod    
     def open(self):
@@ -32,6 +35,28 @@ class Interface(DAQ):
     @abstractmethod
     def configure(self): #second arg will be config info
         pass
+    
+    @property
+    def inputs(self):
+        return self.input_list
+        
+    @inputs.setter    
+    def inputs(self,input_list):
+        self.input_list = input_list
+
+        
+    def add_input(iface_input):
+        self.input_list.append(iface_input)
+    
+    def output_list():
+        return self.output_list
+        
+    def output_list(output_list):
+        self.output_list = output_list
+
+    def add_output(iface_output):
+        self.output_list.append(iface_output)
+    
     
     
 class SerialPort(Interface):

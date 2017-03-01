@@ -91,7 +91,8 @@ class TCPPort(Interface):
 class DummyPort(Interface):
     
     def __init__(self):
-        super().__init__(self)
+        super().__init__()
+        self.name = "DummyPort"
         
     def open(self):
         pass

@@ -4,6 +4,7 @@ instrument.py:
     instruments in the erd suite. 
 '''
 from erd.daq.daq import DAQ
+from erd.daq.interface.ifacefactory import InterfaceFactory
 import abc
 
 import asyncio
@@ -12,15 +13,22 @@ class Instrument(DAQ):
 #class Instrument(abc.ABCMeta):
     #Eventually this will be a metadata class
     
-    def __init__(self):
+    def __init__(self,config):
+        super().__init__()
         self.name = 'Instrument'
         self.type = 'Generic'
         self.mfg = None
         self.model = None
         print("Name: ", self.name)
         
+        self.config = config
+        self.iface_map = {}
+        self.configure()
         #info = InstrumentInfo()
         #interface = Interface()
+    
+    def open(self):
+        pass
     
     @abc.abstractmethod
     def start(self):
@@ -30,44 +38,67 @@ class Instrument(DAQ):
         pass
 
     def configure(self):
-        pass
-    
-    @staticmethod
-    @abc.abstractmethod
-    def factory_create():
-        pass
+        imap = self.config['interface_map']
+        for key in imap.keys():
+            print('key : ' + key)
+            iface_cfg = imap[key]
+            print(iface_cfg)
+            iface = InterfaceFactory.create(iface_cfg)
+            self.iface_map[key] = iface
+
+    # @staticmethod
+    # @abc.abstractmethod
+    # def factory_create():
+    #     pass
            
     
 
 class DummyInstrument(Instrument):
 
-    def __init__(self):
+    def __init__(self,config):
+        super().__init__(config)
         self.name = 'DummyInstrument'
         self.type = 'Test'
         self.mfg = "DummyMfg"
         self.model = "DummyModel"
         print("Name: ", self.name)
         
+        self.is_running = False
+        
         #info = InstrumentInfo()
         #interface = Interface()
     
-    def start(self):
-        task = asyncio.ensure_future(run_client(message,loop))
-            
-    def stop(self):
+    def open(self):
         pass
+        #task = asyncio.ensure_future(run_client(message,loop))
 
-    def configure(self):
-        pass
-    
-    @staticmethod
-    def factory_create():
-        return DummyInstrument()
+    def start(self):
+        task = asyncio.ensure_future(self.read_loop())
+        self.task_list.append(task)
+        self.is_running = True
         
-    def read():
+    def stop(self):
+        print("stopping DummyInstrument")
+        tasks = asyncio.Task.all_tasks()
+        for t in self.task_list:
+            t.cancel()
+            tasks.remove(t)
+        self.is_running = False
+
+    # def configure(self):
+    #     pass
+    
+    # @staticmethod
+    # def factory_create():
+    #     return DummyInstrument()
+        
+    def read(self):
         print("DummyInstrument.read()")
         
-    async def read_loop():
-        await self.read()
-    
+        
+    async def read_loop(self):
+        while self.is_running:
+            self.read()
+            await asyncio.sleep(1)
+            
 # Need to include event loop at this level

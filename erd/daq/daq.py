@@ -21,15 +21,16 @@ class DAQ(metaclass=abc.ABCMeta):
         #info = InstrumentInfo()
         #interface = Interface()
         self.loop = asyncio.get_event_loop()
+        self.task_list = []
         
     @abc.abstractmethod
     def configure(self):
         pass
     
-    @staticmethod
-    @abc.abstractmethod
-    def factory_create():
-        pass
+    # @staticmethod
+    # @abc.abstractmethod
+    # def factory_create():
+    #     pass
 
        
     

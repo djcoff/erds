@@ -44,7 +44,29 @@ import inspect
 # def build_class_config():
 
 def dummy_build_inst_config():
-    dummy = {"name":"dummy","class":"DummyInstrument"}
+    dummy_inst = {
+        "name":"dummy_inst",
+        "module":"erd.daq.instrument.instrument",
+        "class":"DummyInstrument"
+        
+    }
+    
+    dummy_iface = {
+        "name":"dummy_iface",
+        "module":"erd.daq.interface.interface",
+        "class":"DummyPort",
+        "iface_cfg": {"host":"moxa16phys1.pmel.noaa.gov","port":4002}
+    }
+    
+    inst_plist_map = {
+        "default":dummy_iface
+    }
+    
+    dummy = {
+        "instrument":dummy_inst,
+        "interface_map":inst_plist_map
+    }
+    
     return dummy
 
 task_list = []
@@ -82,15 +104,25 @@ def new_task():
         task = asyncio.ensure_future(run_task(task_cls))
         task_list.append(task)
     
+async def heartbeat():
+    while True:
+        print("beat")
+        await asyncio.sleep(10)
+    
+
 if __name__ == "__main__":
 
 
     #InstrumentFactory.build_factories()
+
+    loop = asyncio.get_event_loop()
+    task = asyncio.ensure_future(heartbeat())
     
-    # config = dummy_build_inst_config()
-    # dummy = InstrumentFactory.create(config)
+    config = dummy_build_inst_config()
+    dummy = InstrumentFactory.create(config)
+    dummy.start()
     
-    # print(dummy)
+    print(dummy)
     
     # classNameGen()
     
@@ -103,26 +135,27 @@ if __name__ == "__main__":
     #print(dummy.__qualname__)
     #print(dummy.__module__)
 
-    loop = asyncio.get_event_loop()
     # async def run_client(message, loop):
     #     await tcp_echo_client(message, loop) 
-    new_task()
-    print(task_list)
+    #new_task()
+    #print(task_list)
     # task = asyncio.ensure_future(run_client(message,loop))
 
     # iface_config = {
-
+    
+    task_list = asyncio.Task.all_tasks()
     try:
         #loop.run_forever()
         #loop.run_until_complete(tcp_echo_client(message, loop))
         #loop.run_until_complete(asyncio.wait([task,]))
         loop.run_until_complete(asyncio.wait(task_list))
     except KeyboardInterrupt:
+        dummy.stop()
          #pass
-         for task in task_list:
-             task.cancel()
-         loop.run_forever()
-    #     task.exception()
+        for task in task_list:
+            task.cancel()
+        loop.run_forever()
+    #    task.exception()
     #    loop.stop()
     finally:
         #loop.run_until_complete(loop.shutdown_asyncgens())

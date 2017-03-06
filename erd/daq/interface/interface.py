@@ -1,6 +1,8 @@
 from abc import ABCMeta, abstractmethod
 import asyncio
 from erd.daq.daq import DAQ
+from datetime import datetime
+
 
 """
 Interface
@@ -22,13 +24,29 @@ class Interface(DAQ):
         #self.config = InterfaceConfig
         self.inputs = []
         self.outputs = []
-        
+        self.is_running = False
+
         self.read_buffer = {}
         # write_buffer?
     
     @abstractmethod    
     def open(self):
         pass
+    
+    def start(self):
+        print("Starting "+self.name)
+        task = asyncio.ensure_future(self.read_loop())
+        self.task_list.append(task)
+        self.is_running = True
+        self.read_buffer['default'] = ''
+
+    def stop(self):
+        print("stopping "+self.name)
+        tasks = asyncio.Task.all_tasks()
+        for t in self.task_list:
+            t.cancel()
+            tasks.remove(t)
+        self.is_running = False
     
     @abstractmethod
     def close(self):
@@ -39,9 +57,24 @@ class Interface(DAQ):
         pass
     
     def read(self,buffer='default'):
-        return self.read_buffer
-        
-        
+        return self.read_buffer[buffer]
+
+    @abstractmethod
+    def get(buf):
+        pass
+
+    async def read_loop(self):
+        while self.is_running:
+            #print('in iface:read_loop')
+            #print(self.read_buffer)
+            for key in self.read_buffer.keys():
+                #print("read_loop["+key+"]")
+                self.get(key)
+                
+            await asyncio.sleep(.5)        
+ 
+    def get_timestamp(self):
+        return datetime.utcnow()
     # @property
     # def inputs(self):
     #     return self.input_list
@@ -78,7 +111,10 @@ class SerialPort(Interface):
     
     def configure(self):
         pass
-    
+ 
+    def get(buf):
+        pass
+   
     
 class TCPPort(Interface):
     
@@ -94,7 +130,10 @@ class TCPPort(Interface):
     
     def configure(self):
         pass
-    
+ 
+    def get(buf):
+        pass
+   
 class DummyPort(Interface):
     
     def __init__(self):
@@ -110,3 +149,14 @@ class DummyPort(Interface):
     def configure(self):
         pass
     
+    def get(self,buf):
+        #print("DummyPort:get("+buf+")")
+        
+        # dummy data
+        dat = '16.4,18.2,1000.4,12,status=OK\n'
+        
+        self.read_buffer[buf] = (self.get_timestamp(),dat)
+        #print(self.read_buffer)
+        #print(dat)
+        
+

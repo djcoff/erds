@@ -36,7 +36,7 @@ class Instrument(DAQ):
     
     def stop(self):
         pass
-
+    
     def configure(self):
         imap = self.config['interface_map']
         for key in imap.keys():
@@ -44,6 +44,7 @@ class Instrument(DAQ):
             iface_cfg = imap[key]
             print(iface_cfg)
             iface = InterfaceFactory.create(iface_cfg)
+            print(iface)
             self.iface_map[key] = iface
 
     # @staticmethod
@@ -73,8 +74,14 @@ class DummyInstrument(Instrument):
         #task = asyncio.ensure_future(run_client(message,loop))
 
     def start(self):
-        task = asyncio.ensure_future(self.read_loop())
-        self.task_list.append(task)
+        
+        # start interface(s)
+        for key in self.iface_map.keys():
+            #print('key: '+key)
+            self.iface_map[key].start()
+            task = asyncio.ensure_future(self.read_loop())
+            self.task_list.append(task)
+        
         self.is_running = True
         
     def stop(self):
@@ -84,6 +91,12 @@ class DummyInstrument(Instrument):
             t.cancel()
             tasks.remove(t)
         self.is_running = False
+        
+        ### THIS ISN'T RIGHT BUT FOR NOW...
+        # stop interfaces
+        for key in self.iface_map.keys():
+            print('key: '+key)
+            self.iface_map[key].stop()
 
     # def configure(self):
     #     pass
@@ -95,6 +108,13 @@ class DummyInstrument(Instrument):
     def read(self):
         print("DummyInstrument.read()")
         
+        for key in self.iface_map.keys():
+            iface = self.iface_map[key]
+            #print(iface)
+            ts,buf = self.iface_map[key].read(buffer=key)
+            #buf = ''
+            print('buffer['+key+']: ' + ts.strftime('%Y-%m-%d %H:%M:%S') + ' -- ' + buf)
+
         
     async def read_loop(self):
         while self.is_running:

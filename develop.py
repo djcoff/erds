@@ -66,8 +66,8 @@ def dummy_build_inst_config():
     }
     
     inst_plist_map = {
-        #"default":dummy_iface
-        "default":tcp_iface
+        "default":dummy_iface
+        #"default":tcp_iface
     }
     
     dummy = {

@@ -57,9 +57,17 @@ def dummy_build_inst_config():
         "class":"DummyPort",
         "iface_cfg": {"host":"moxa16phys1.pmel.noaa.gov","port":4002}
     }
+
+    tcp_iface = {
+        "name":"tcpport_iface",
+        "module":"erd.daq.interface.interface",
+        "class":"TCPPort",
+        "iface_cfg": {"host":"192.168.86.106","port":4001}
+    }
     
     inst_plist_map = {
-        "default":dummy_iface
+        #"default":dummy_iface
+        "default":tcp_iface
     }
     
     dummy = {
@@ -67,6 +75,7 @@ def dummy_build_inst_config():
         "interface_map":inst_plist_map
     }
     
+
     return dummy
 
 task_list = []

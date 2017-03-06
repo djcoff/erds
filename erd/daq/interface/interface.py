@@ -23,6 +23,8 @@ class Interface(DAQ):
         self.inputs = []
         self.outputs = []
         
+        self.read_buffer = {}
+        # write_buffer?
     
     @abstractmethod    
     def open(self):
@@ -36,6 +38,10 @@ class Interface(DAQ):
     def configure(self): #second arg will be config info
         pass
     
+    def read(self,buffer='default'):
+        return self.read_buffer
+        
+        
     # @property
     # def inputs(self):
     #     return self.input_list
@@ -78,6 +84,7 @@ class TCPPort(Interface):
     
     def __init__(self):
         super().__init__()
+        self.name = 'TCPPort'
         
     def open(self):
         pass

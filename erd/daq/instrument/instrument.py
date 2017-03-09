@@ -13,6 +13,10 @@ class Instrument(DAQ):
 #class Instrument(abc.ABCMeta):
     #Eventually this will be a metadata class
     
+    
+    
+    base_config = {}
+    
     def __init__(self,config):
         super().__init__()
         self.name = 'Instrument'
@@ -20,6 +24,8 @@ class Instrument(DAQ):
         self.mfg = None
         self.model = None
         print("Name: ", self.name)
+        
+        self.parameter_list = {}
         
         self.config = config
         self.iface_map = {}
@@ -47,11 +53,27 @@ class Instrument(DAQ):
             print(iface)
             self.iface_map[key] = iface
 
+    # @abstractmethod
+    def configure_param_list():
+        pass
+    
     # @staticmethod
     # @abc.abstractmethod
     # def factory_create():
     #     pass
            
+    
+    # @classmethod
+    # def _get_base_config():
+        
+    
+    # @classmethod
+    # @abstractmethod
+    # def get_config():
+    #     pass
+        
+        
+        
     
 
 class DummyInstrument(Instrument):
@@ -68,6 +90,43 @@ class DummyInstrument(Instrument):
         
         #info = InstrumentInfo()
         #interface = Interface()
+
+    def configure_param_list(self):
+        
+        # param_list should definte 'polled|unpolled' and what command needs 
+        #            to be sent polled reads
+        
+        # define param
+        param = {
+            'input':'default',
+            'output':'default',
+            'interface':None,
+            'name':'temperature_dp',
+            'long_name':'Dewpoint Temperature',
+            'units':'C'
+        }
+        self.parameter_list[param['name']] = param
+        
+        # param = {
+        #     'input':'default'
+        #     'output':'default'
+        #     'interface':None
+        #     'name':'temperature'
+        #     'long_name':'Temperature'
+        #     'units':'C'
+        # }
+        # self.parameter_list[param['name']] = param
+
+        # param = {
+        #     'input':'default'
+        #     'output':'default'
+        #     'interface':None
+        #     'name':'pressure'
+        #     'long_name':'Pressure'
+        #     'units':'mbar'
+        # }
+        # self.parameter_list[param['name']] = param
+
     
     def open(self):
         pass

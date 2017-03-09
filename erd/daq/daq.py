@@ -11,6 +11,8 @@ class DAQ(metaclass=abc.ABCMeta):
 #class Instrument(abc.ABCMeta):
     #Eventually this will be a metadata class
     
+    
+    
     def __init__(self):
         self.name = 'DAQ'
         self.type = 'Generic'

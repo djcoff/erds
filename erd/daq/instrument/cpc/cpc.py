@@ -1,5 +1,4 @@
-from erd.daq.instrument import Instrument
-
+from erd.daq.instrument.instrument import Instrument
 
 class CPC(Instrument):
     

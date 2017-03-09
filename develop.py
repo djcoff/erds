@@ -7,6 +7,7 @@ import sys
 
 from erd.daq.instrument.instfactory import InstrumentFactory
 from erd.daq.instrument.instrument import Instrument
+from erd.daq.config import DAQConfig
 
 import asyncio
 import inspect
@@ -121,7 +122,10 @@ async def heartbeat():
 
 if __name__ == "__main__":
 
-
+    instlist = DAQConfig.get_list(DAQConfig.INSTRUMENT)
+    for cls in instlist:
+        print('Instrument subclass: (' + cls.__module__ + ') ' + cls.__name__)
+        #print(inspect.getmembers(cls))
     #InstrumentFactory.build_factories()
 
     loop = asyncio.get_event_loop()

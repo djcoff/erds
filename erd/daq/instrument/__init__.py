@@ -1,1 +1,1 @@
-__all__ = ['instrument','instfactory']
+__all__ = ['instrument','instfactory','cpc','navigate']

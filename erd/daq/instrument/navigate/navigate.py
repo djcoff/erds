@@ -1,5 +1,5 @@
 #from ..instrument import Instrument
-from daq.instrument.instrument import Instrument
+from erd.daq.instrument.instrument import Instrument
 
 class Navigate(Instrument):
     

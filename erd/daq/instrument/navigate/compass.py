@@ -4,27 +4,27 @@
 
 # for line in sys.path: print(line)
 
-# from daq.instrument.navigate.navigate import Navigate
+from erd.daq.instrument.navigate.navigate import Navigate
 
-# class MagCompass(Navigate):
+class MagCompass(Navigate):
     
-#     def __init__(self):
-#         super().__init__()
-#         self.type = 'Compass'
+    def __init__(self):
+        super().__init__()
+        self.type = 'Compass'
         
-#     def start(self):
-#         pass
+    def start(self):
+        pass
     
-#     def handle(self,msg):
-#         pass
+    def handle(self,msg):
+        pass
     
-#     def parse(self,msg):
-#         pass
+    def parse(self,msg):
+        pass
 
-def test_path():
+# def test_path():
     
-    print('****')
-    for line in sys.path: print(line)
+#     print('****')
+#     for line in sys.path: print(line)
     
 # if __name__ == "__main__":
     

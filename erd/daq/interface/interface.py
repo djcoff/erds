@@ -3,6 +3,7 @@ import asyncio
 from erd.daq.daq import DAQ
 from datetime import datetime
 
+import random
 
 """
 Interface
@@ -71,7 +72,7 @@ class Interface(DAQ):
                 #print("read_loop["+key+"]")
                 self.get(key)
                 
-            await asyncio.sleep(.5)        
+            await asyncio.sleep(.25)        
  
     def get_timestamp(self):
         return datetime.utcnow()
@@ -153,9 +154,12 @@ class DummyPort(Interface):
         #print("DummyPort:get("+buf+")")
         
         # dummy data
-        dat = '16.4,18.2,1000.4,12,status=OK\n'
+#        dat = '16.4,18.2,1000.4,12,status=OK\n'
         
+        dat = str(random.uniform(13,15))+','+str(random.uniform(16,19))+','+str(random.uniform(990,1020))+','+str(random.uniform(11,13))+',status=OK\n'
         self.read_buffer[buf] = (self.get_timestamp(),dat)
+        #print('Interface.get:')
+        #print(self.read_buffer[buf])
         #print(self.read_buffer)
         #print(dat)
         

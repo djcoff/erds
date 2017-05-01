@@ -63,11 +63,11 @@ def dummy_build_inst_config():
         "name":"tcpport_iface",
         "module":"erd.daq.interface.interface",
         "class":"TCPPort",
-        "iface_cfg": {"host":"192.168.86.106","port":4001}
+        "iface_cfg": {"host":"192.168.86.110","port":4001}
     }
     
     inst_plist_map = {
-        "default":dummy_iface
+        #"default":dummy_iface
         #"default":tcp_iface
     }
     

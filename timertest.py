@@ -18,7 +18,7 @@ while i<1:
     #print(ts_final)
     
     while (datetime.utcnow() < ts_timer):
-        #print(datetime.utcnow())
+        print(datetime.utcnow())
         sleep(0.05)
     
     print("Timer went off: ")

@@ -1,4 +1,5 @@
 import sys
+#  test git connectivity
 #import erd
 #from erd.daq import *
 #from erd.daq.instrument.cpc.tsicpc import TSI3010
